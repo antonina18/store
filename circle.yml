@@ -1,0 +1,36 @@
+machine:
+  java:
+    version: oraclejdk8
+
+machine:
+  services:
+    - docker
+
+dependencies:
+  override:
+    - mvn clean install -DskipTests
+    - docker info
+    - docker build --rm=false -t antonina18/store .
+    - docker tag antonina18/store antonina18/store:$CIRCLE_BUILD_NUM
+    - docker images
+
+test:
+  override:
+    - mvn test
+    - docker run --name store -d -p 8080:8080 antonina18/store:$CIRCLE_BUILD_NUM ; sleep 10
+    - docker logs store
+    - curl --retry 1 --retry-delay 1 -v http://localhost:8080/health
+
+deployment:
+  hub:
+    branch: master
+    commands:
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - docker push antonina18/store:$CIRCLE_BUILD_NUM
+      - docker push antonina18/store:latest
+
+deployment:
+  production:
+    branch: master
+    heroku:
+      appname: store-ksowa-production
