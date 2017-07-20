@@ -6,7 +6,8 @@ import org.springframework.stereotype.Service;
 public class StoreService {
 
 
-    public Double getBasketContent() {
+    public Integer getBasketContent() {
+
         return null;
     }
 }

@@ -38,9 +38,9 @@ public class StoreControllerTest {
     public void shouldReturn200okAnd0actualPrice() throws Exception {
         String expected = "{\"price\":0.0}";
 
-        given(storeService.getBasketContent()).willReturn(0.0);
+        given(storeService.getBasketContent()).willReturn(0);
 
-        mockMvc.perform(get("/store/basket"))
+        mockMvc.perform(get("/store/receipt"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(expected));
 

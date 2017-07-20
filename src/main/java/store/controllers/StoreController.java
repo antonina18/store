@@ -20,9 +20,9 @@ public class StoreController {
         this.storeService = storeService;
     }
 
-    @GetMapping("/basket")
-    public ResponseEntity<Map<String,Double>> getBasketContent(){
-        final Map<String, Double> basket = Collections.singletonMap("price", storeService.getBasketContent());
+    @GetMapping("/receipt")
+    public ResponseEntity<Map<String,Integer>> getReceipt(){
+        final Map<String, Integer> basket = Collections.singletonMap("price", storeService.getBasketContent());
         return new ResponseEntity<>(basket, HttpStatus.OK);
     }
 
