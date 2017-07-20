@@ -28,6 +28,8 @@ deployment:
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
       - docker push antonina18/store:$CIRCLE_BUILD_NUM
       - docker push antonina18/store:latest
+
+deployment:
   production:
     branch: master
     heroku:
