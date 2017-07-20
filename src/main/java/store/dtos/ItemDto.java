@@ -1,28 +1,13 @@
-package store.models;
+package store.dtos;
 
-import javax.persistence.*;
-import java.io.Serializable;
+import store.models.SpecialPrice;
 
-@Entity
-public class Item implements Serializable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+public class ItemDto {
 
     private String name;
     private Integer price;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private SpecialPrice specialPrice;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -47,4 +32,5 @@ public class Item implements Serializable {
     public void setSpecialPrice(SpecialPrice specialPrice) {
         this.specialPrice = specialPrice;
     }
+
 }
