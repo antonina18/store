@@ -19,7 +19,7 @@ test:
     - mvn test
     - docker run --name store -d -p 8080:8080 antonina18/store:$CIRCLE_BUILD_NUM ; sleep 10
     - docker logs store
-    - curl --retry 1 --retry-delay 1 -v http://localhost:8080/health
+    - curl --retry 1 --retry-delay 3 -v http://localhost:8080/health
 
 deployment:
   hub:
