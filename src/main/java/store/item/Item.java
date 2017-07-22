@@ -1,19 +1,11 @@
-package store.dtos;
+package store.item;
 
-public class ItemDto {
+public class Item {
 
-    private Long id;
     private String name;
     private Integer price;
-    private SpecialPriceDto specialPrice;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    private SpecialPrice specialPrice;
 
     public String getName() {
         return name;
@@ -31,11 +23,11 @@ public class ItemDto {
         this.price = price;
     }
 
-    public SpecialPriceDto getSpecialPrice() {
+    public SpecialPrice getSpecialPrice() {
         return specialPrice;
     }
 
-    public void setSpecialPrice(SpecialPriceDto specialPrice) {
+    public void setSpecialPrice(SpecialPrice specialPrice) {
         this.specialPrice = specialPrice;
     }
 }

@@ -1,17 +1,9 @@
 package store.stub;
 
-import store.dtos.ItemDto;
-import store.models.Item;
+import store.item.Item;
+import store.item.SpecialPrice;
 
 public class ItemObjectMother {
-
-    public static ItemDto itemDto(String name, Integer price){
-        ItemDto itemDto = new ItemDto();
-        itemDto.setName(name);
-        itemDto.setPrice(price);
-
-        return itemDto;
-    }
 
     public static Item item(String name, Integer price){
         Item item = new Item();
@@ -19,5 +11,22 @@ public class ItemObjectMother {
         item.setPrice(price);
 
         return item;
+    }
+
+    public static Item itemWithSpecialPrice(String name, Integer price, SpecialPrice specialPrice){
+        Item item = new Item();
+        item.setName(name);
+        item.setPrice(price);
+        item.setSpecialPrice(specialPrice);
+
+        return item;
+    }
+
+    public static SpecialPrice specialPrice(Integer unit, Integer price){
+        SpecialPrice specialPrice = new SpecialPrice();
+        specialPrice.setUnit(unit);
+        specialPrice.setPrice(price);
+
+        return specialPrice;
     }
 }
