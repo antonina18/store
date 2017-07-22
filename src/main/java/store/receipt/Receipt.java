@@ -1,5 +1,6 @@
 package store.receipt;
 
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import org.springframework.stereotype.Component;
 import store.item.Item;
 
@@ -9,6 +10,7 @@ import java.util.Map;
 @Component
 public class Receipt {
 
+    @JsonUnwrapped
     private Map<Item, Integer> itemUnitMap = new HashMap<>();
     private int totalPrice = 0;
 
@@ -48,6 +50,33 @@ public class Receipt {
 
     public int getTotalPrice() {
         return totalPrice;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Receipt receipt = (Receipt) o;
+
+        if (totalPrice != receipt.totalPrice) return false;
+        return itemUnitMap != null ? itemUnitMap.equals(receipt.itemUnitMap) : receipt.itemUnitMap == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = itemUnitMap != null ? itemUnitMap.hashCode() : 0;
+        result = 31 * result + totalPrice;
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Receipt{" +
+                "itemUnitMap=" + itemUnitMap +
+                ", totalPrice=" + totalPrice +
+                '}';
     }
 
 }

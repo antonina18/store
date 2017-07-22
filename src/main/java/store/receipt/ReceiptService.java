@@ -15,4 +15,8 @@ public class ReceiptService {
         return receipt;
     }
 
+    public void resetReceipt() {
+        receipt.reset();
+    }
+
 }

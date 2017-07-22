@@ -9,7 +9,6 @@ public class ItemObjectMother {
         Item item = new Item();
         item.setName(name);
         item.setPrice(price);
-
         return item;
     }
 

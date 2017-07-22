@@ -17,7 +17,7 @@ public class ItemController {
         this.itemService = itemService;
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<Map<String,Integer>> addItems(
             @RequestParam Integer unit,
             @RequestBody Item item
