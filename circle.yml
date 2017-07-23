@@ -17,7 +17,7 @@ dependencies:
 test:
   override:
     - mvn test
-    - docker run --name store -d -p 8080:8080 antonina18/store:$CIRCLE_BUILD_NUM ; sleep 15
+    - docker run --name store -d -p 8080:8080 antonina18/store:$CIRCLE_BUILD_NUM ; sleep 25
     - docker logs store
     - curl --retry 3 --retry-delay 5 -v http://localhost:8080/store/health
 
