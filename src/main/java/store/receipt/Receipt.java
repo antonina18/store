@@ -2,6 +2,7 @@ package store.receipt;
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import org.springframework.stereotype.Component;
+import store.item.Bargain;
 import store.item.Item;
 
 import java.util.HashMap;
@@ -10,24 +11,33 @@ import java.util.Map;
 @Component
 public class Receipt {
 
+    private final Bargain bargain;
+
+    public Receipt(Bargain bargain) {
+        this.bargain = bargain;
+    }
+
     @JsonUnwrapped
     private Map<Item, Integer> itemUnitMap = new HashMap<>();
-    private int totalPrice = 0;
+    private int total = 0;
+    private int toPay = 0;
+    private int bargainAmount =0;
 
     public void addItems(Integer unit, Item item) {
         itemUnitMap.merge(item, unit, Integer::sum);
-        calculateTotalPrice();
+        calculate();
     }
 
-    private void calculateTotalPrice() {
-        totalPrice = itemUnitMap.entrySet().stream()
+
+    private void calculate() {
+        total = itemUnitMap.entrySet().stream()
                 .mapToInt(e -> {
                     int itemPrice = 0;
                     if (e.getKey().getSpecialPrice() == null) {
                         itemPrice += e.getValue() * e.getKey().getPrice();
                     } else {
                         Integer unitsForSpecialPrice = e.getKey().getSpecialPrice().getUnit();
-                        Integer specialPriceAmmount = e.getKey().getSpecialPrice().getPrice();
+                        Integer specialPriceAmount = e.getKey().getSpecialPrice().getPrice();
                         Integer normalPrice = e.getKey().getPrice();
                         Integer unitsOfItem = e.getValue();
                         if (unitsOfItem < unitsForSpecialPrice) {
@@ -35,21 +45,25 @@ public class Receipt {
                         } else {
                             int aggregatedUnitsSpecialPriced = unitsOfItem/unitsForSpecialPrice;
                             int unitsNormalPriced = unitsOfItem - (aggregatedUnitsSpecialPriced * unitsForSpecialPrice);
-                            itemPrice += aggregatedUnitsSpecialPriced * specialPriceAmmount;
+                            itemPrice += aggregatedUnitsSpecialPriced * specialPriceAmount;
                             itemPrice += normalPrice * unitsNormalPriced;
                         }
                     }
                     return itemPrice;
                 }).sum();
+        bargainAmount = bargain.getDiscount(itemUnitMap);
+        toPay = total - bargainAmount;
     }
 
     public void reset() {
         itemUnitMap = new HashMap<>();
-        totalPrice = 0;
+        total = 0;
+        toPay = 0;
+        bargainAmount = 0;
     }
 
-    public int getTotalPrice() {
-        return totalPrice;
+    public int getTotal() {
+        return total;
     }
 
     @Override
@@ -59,7 +73,7 @@ public class Receipt {
 
         Receipt receipt = (Receipt) o;
 
-        if (totalPrice != receipt.totalPrice) return false;
+        if (total != receipt.total) return false;
         return itemUnitMap != null ? itemUnitMap.equals(receipt.itemUnitMap) : receipt.itemUnitMap == null;
 
     }
@@ -67,16 +81,34 @@ public class Receipt {
     @Override
     public int hashCode() {
         int result = itemUnitMap != null ? itemUnitMap.hashCode() : 0;
-        result = 31 * result + totalPrice;
+        result = 31 * result + total;
         return result;
     }
 
     @Override
     public String toString() {
         return "Receipt{" +
-                "itemUnitMap=" + itemUnitMap +
-                ", totalPrice=" + totalPrice +
+                "bargain=" + bargain +
+                ", itemUnitMap=" + itemUnitMap +
+                ", total=" + total +
+                ", toPay=" + toPay +
+                ", bargainAmount=" + bargainAmount +
                 '}';
     }
 
+    public Map<Item, Integer> getItemUnitMap() {
+        return itemUnitMap;
+    }
+
+    public Bargain getBargain() {
+        return bargain;
+    }
+
+    public int getToPay() {
+        return toPay;
+    }
+
+    public int getBargainAmount() {
+        return bargainAmount;
+    }
 }

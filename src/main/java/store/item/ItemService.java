@@ -14,7 +14,7 @@ public class ItemService {
 
     public Integer addItems(Integer unit, Item item) {
         receipt.addItems(unit, item);
-        return receipt.getTotalPrice();
+        return receipt.getToPay();
     }
 
 }

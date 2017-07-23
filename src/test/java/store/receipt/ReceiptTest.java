@@ -3,7 +3,9 @@ package store.receipt;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
+import store.item.Bargain;
 import store.item.Item;
 import store.item.SpecialPrice;
 import store.stub.ItemObjectMother;
@@ -13,14 +15,17 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static store.stub.ItemObjectMother.item;
 
-@RunWith(SpringRunner.class)
+@RunWith(MockitoJUnitRunner.class)
 public class ReceiptTest {
 
     private Receipt receipt;
 
+    @Mock
+    private Bargain bargain;
+
     @Before
     public void setUp(){
-        this.receipt = new Receipt();
+        this.receipt = new Receipt(bargain);
     }
 
     @Test
@@ -30,7 +35,7 @@ public class ReceiptTest {
         Item item = item("masło", 12);
         //when
         receipt.addItems(7, item);
-        int actual = receipt.getTotalPrice();
+        int actual = receipt.getToPay();
 
         assertThat(actual, is(equalTo(expected)));
     }
@@ -44,7 +49,7 @@ public class ReceiptTest {
 
         //when
         receipt.addItems(2, item);
-        int actual = receipt.getTotalPrice();
+        int actual = receipt.getToPay();
 
         //then
         assertThat(actual, is(equalTo(expected)));
@@ -58,7 +63,7 @@ public class ReceiptTest {
         Item item = ItemObjectMother.itemWithSpecialPrice("butter", 12, specialPrice);
         //when
         receipt.addItems(7, item);
-        int actual = receipt.getTotalPrice();
+        int actual = receipt.getToPay();
 
         //then
         assertThat(actual, is(equalTo(expected)));
@@ -76,7 +81,29 @@ public class ReceiptTest {
         receipt.addItems(7, butter);
         receipt.addItems(3, bread);
         receipt.addItems(2, butter);
-        int actual = receipt.getTotalPrice();
+        int actual = receipt.getToPay();
+
+        //then
+        assertThat(actual, is(equalTo(expected)));
+    }
+
+
+    @Test
+    public void shouldReturnReceiptWithAggregateItemsIncludingAllBargains() throws Exception {
+        //given
+        int expected = 100;
+        SpecialPrice specialPriceForButter = ItemObjectMother.specialPrice(3, 30);
+        SpecialPrice specialPriceForBread = ItemObjectMother.specialPrice(3, 10);
+        Item butter = ItemObjectMother.itemWithSpecialPrice("butter", 12, specialPriceForButter);
+        Item bread = ItemObjectMother.itemWithSpecialPrice("mleko", 3, specialPriceForBread);
+
+        //when
+        receipt.addItems(2, butter);
+        receipt.addItems(3, bread);
+        receipt.addItems(2, butter);
+        receipt.addItems(3, butter);
+        receipt.addItems(2, butter);
+        int actual = receipt.getToPay();
 
         //then
         assertThat(actual, is(equalTo(expected)));
@@ -87,10 +114,11 @@ public class ReceiptTest {
         //given
         int expected = 0;
         Item item = item("masło", 12);
+
         //when
         receipt.addItems(7, item);
         receipt.reset();
-        int actual = receipt.getTotalPrice();
+        int actual = receipt.getToPay();
 
         //then
         assertThat(actual, is(equalTo(expected)));
