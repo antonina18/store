@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.springframework.test.context.junit4.SpringRunner;
-import store.item.Bargain;
+import bargain.Bargain;
 import store.item.Item;
 import store.item.SpecialPrice;
 import store.receipt.Receipt;

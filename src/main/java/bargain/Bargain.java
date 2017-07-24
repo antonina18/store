@@ -1,7 +1,7 @@
-package store.item;
+package bargain;
 
-import javafx.util.Pair;
 import org.springframework.stereotype.Component;
+import store.item.Item;
 
 import java.util.AbstractMap;
 import java.util.Arrays;
@@ -15,12 +15,12 @@ import static java.util.stream.Collectors.toList;
 @Component
 public class Bargain {
 
-    private static final Map<Pair<String,String>,Integer> promotionMap = Stream.of(
-            new AbstractMap.SimpleEntry<>(new Pair<>("butter", "bread"), 3),
-            new AbstractMap.SimpleEntry<>(new Pair<>("milk", "juice"), 2)
+    private static final Map<PromotionItems,Integer> promotionMap = Stream.of(
+            new AbstractMap.SimpleEntry<>(new PromotionItems("butter", "bread"), 3),
+            new AbstractMap.SimpleEntry<>(new PromotionItems("milk", "juice"), 2)
     ).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
-    public Map<Pair<String, String>, Integer> getPromotionMap() {
+    public Map<PromotionItems, Integer> getPromotionMap() {
         return promotionMap;
     }
 
@@ -29,7 +29,7 @@ public class Bargain {
                 .map(e -> e.getKey().getName())
                 .collect(toList());
         return promotionMap.entrySet().stream()
-                .filter(e -> itemNameList.containsAll(Arrays.asList(e.getKey().getKey(), e.getKey().getValue())))
+                .filter(e -> itemNameList.containsAll(Arrays.asList(e.getKey().getItemX(), e.getKey().getItemY())))
                 .mapToInt(Map.Entry::getValue)
                 .sum();
     }

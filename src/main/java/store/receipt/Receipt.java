@@ -2,7 +2,7 @@ package store.receipt;
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import org.springframework.stereotype.Component;
-import store.item.Bargain;
+import bargain.Bargain;
 import store.item.Item;
 
 import java.util.HashMap;
