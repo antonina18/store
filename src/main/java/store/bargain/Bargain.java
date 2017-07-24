@@ -1,4 +1,4 @@
-package bargain;
+package store.bargain;
 
 import org.springframework.stereotype.Component;
 import store.item.Item;

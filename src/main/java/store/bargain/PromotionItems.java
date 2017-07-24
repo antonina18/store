@@ -1,4 +1,4 @@
-package bargain;
+package store.bargain;
 
 /**
  * Created by KASW on 2017-07-24.
