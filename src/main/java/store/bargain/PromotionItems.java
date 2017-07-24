@@ -20,4 +20,12 @@ public class PromotionItems {
     public String getItemY() {
         return itemY;
     }
+
+    @Override
+    public String toString() {
+        return "PromotionItems{" +
+                "itemX='" + itemX + '\'' +
+                ", itemY='" + itemY + '\'' +
+                '}';
+    }
 }
