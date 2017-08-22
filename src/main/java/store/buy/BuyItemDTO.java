@@ -1,4 +1,4 @@
-package store.item;
+package store.buy;
 
 import lombok.Data;
 

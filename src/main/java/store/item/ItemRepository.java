@@ -1,6 +1,11 @@
-package store.bargain;
+package store.item;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import store.bargain.PromotionItems;
 
-public interface BargainRepository extends JpaRepository<PromotionItems,Integer> {
+import java.util.Optional;
+
+public interface ItemRepository extends JpaRepository<Item,Integer> {
+
+    Optional<Item> findByName(String name);
 }

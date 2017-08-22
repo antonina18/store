@@ -25,7 +25,7 @@ public class ReceiptTest {
 
     @Before
     public void setUp(){
-        this.receipt = new Receipt(bargain);
+        this.receipt = null;
     }
 
     @Test

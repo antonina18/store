@@ -1,4 +1,4 @@
-package store.item;
+package store.buy;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
