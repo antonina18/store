@@ -1,22 +1,17 @@
 package store.receipt;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.springframework.stereotype.Service;
 
 @Service
+@Data
+@AllArgsConstructor
 public class ReceiptService {
 
     private final Receipt receipt;
 
-    public ReceiptService(Receipt receipt) {
-        this.receipt = receipt;
-    }
-
-    public Receipt getReceipt() {
-        return receipt;
-    }
-
     public void resetReceipt() {
         receipt.reset();
     }
-
 }

@@ -1,20 +1,30 @@
 package store.receipt;
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import store.bargain.Bargain;
+import store.bargain.BargainService;
 import store.item.Item;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Component
+@Data
+@NoArgsConstructor
 public class Receipt {
 
-    private final Bargain bargain;
+    private Bargain bargain;
+    private BargainService bargainService;
 
-    public Receipt(Bargain bargain) {
+    @Autowired
+    public Receipt(Bargain bargain, BargainService bargainService) {
         this.bargain = bargain;
+        this.bargainService = bargainService;
     }
 
     @JsonUnwrapped
@@ -24,35 +34,56 @@ public class Receipt {
     private int bargainAmount =0;
 
     public void addItems(Integer unit, Item item) {
-        itemUnitMap.merge(item, unit, Integer::sum);
+//        itemUnitMap.merge(item, unit, Integer::sum);
         calculate();
     }
 
+    public Integer getToPay(){
+        calculate();
+        return toPay;
+    }
 
-    private void calculate() {
+
+    public void calculate() {
         total = itemUnitMap.entrySet().stream()
-                .mapToInt(e -> {
+                .mapToInt(item -> {
                     int itemPrice = 0;
-                    if (e.getKey().getSpecialPrice() == null) {
-                        itemPrice += e.getValue() * e.getKey().getPrice();
+                    if (item.getKey().getSpecialPrice() == null) {
+                        itemPrice = simpleCalculate(item, itemPrice);
                     } else {
-                        Integer unitsForSpecialPrice = e.getKey().getSpecialPrice().getUnit();
-                        Integer specialPriceAmount = e.getKey().getSpecialPrice().getPrice();
-                        Integer normalPrice = e.getKey().getPrice();
-                        Integer unitsOfItem = e.getValue();
-                        if (unitsOfItem < unitsForSpecialPrice) {
-                            itemPrice += e.getValue() * e.getKey().getPrice();
-                        } else {
-                            int aggregatedUnitsSpecialPriced = unitsOfItem/unitsForSpecialPrice;
-                            int unitsNormalPriced = unitsOfItem - (aggregatedUnitsSpecialPriced * unitsForSpecialPrice);
-                            itemPrice += aggregatedUnitsSpecialPriced * specialPriceAmount;
-                            itemPrice += normalPrice * unitsNormalPriced;
-                        }
+                        itemPrice = calculateWithSpecialPrice(item, itemPrice);
                     }
                     return itemPrice;
                 }).sum();
-        bargainAmount = bargain.getDiscount(itemUnitMap);
+        bargainAmount = bargainService.getDiscount(itemUnitMap);
         toPay = total - bargainAmount;
+    }
+
+    private int calculateWithSpecialPrice(Map.Entry<Item, Integer> item, int itemPrice) {
+        Integer unitsForSpecialPrice = item.getKey().getSpecialPrice().getUnit();
+        Integer unitsOfItem = item.getValue();
+        if (unitsOfItem < unitsForSpecialPrice) {
+            itemPrice = simpleCalculate(item, itemPrice);
+        } else {
+            itemPrice = calculateWithBargains(item, itemPrice, unitsForSpecialPrice, unitsOfItem);
+        }
+        return itemPrice;
+    }
+
+    private int calculateWithBargains(Map.Entry<Item, Integer> item, int itemPrice, Integer unitsForSpecialPrice, Integer unitsOfItem) {
+        Integer specialPriceAmount = item.getKey().getSpecialPrice().getPrice();
+        Integer normalPrice = item.getKey().getPrice();
+
+        int aggregatedUnitsSpecialPriced = unitsOfItem/unitsForSpecialPrice;
+        int unitsNormalPriced = unitsOfItem - (aggregatedUnitsSpecialPriced * unitsForSpecialPrice);
+        itemPrice += aggregatedUnitsSpecialPriced * specialPriceAmount;
+        itemPrice += normalPrice * unitsNormalPriced;
+        return itemPrice;
+    }
+
+    private int simpleCalculate(Map.Entry<Item, Integer> item, int itemPrice) {
+        itemPrice += item.getValue() * item.getKey().getPrice();
+        return itemPrice;
     }
 
     public void reset() {
@@ -62,53 +93,4 @@ public class Receipt {
         bargainAmount = 0;
     }
 
-    public int getTotal() {
-        return total;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Receipt receipt = (Receipt) o;
-
-        if (total != receipt.total) return false;
-        return itemUnitMap != null ? itemUnitMap.equals(receipt.itemUnitMap) : receipt.itemUnitMap == null;
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result = itemUnitMap != null ? itemUnitMap.hashCode() : 0;
-        result = 31 * result + total;
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        return "Receipt{" +
-                "bargain=" + bargain +
-                ", itemUnitMap=" + itemUnitMap +
-                ", total=" + total +
-                ", toPay=" + toPay +
-                ", bargainAmount=" + bargainAmount +
-                '}';
-    }
-
-    public Map<Item, Integer> getItemUnitMap() {
-        return itemUnitMap;
-    }
-
-    public Bargain getBargain() {
-        return bargain;
-    }
-
-    public int getToPay() {
-        return toPay;
-    }
-
-    public int getBargainAmount() {
-        return bargainAmount;
-    }
 }
