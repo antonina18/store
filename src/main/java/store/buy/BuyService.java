@@ -23,7 +23,7 @@ public class BuyService {
 
     public Integer buy(BuyItemDTO buyItemDTO) {
         Optional<Item> oItem = itemRepository.findByName(buyItemDTO.getName());
-        oItem.ifPresent(basket::addToBasket);
+        oItem.ifPresent(item -> basket.addToBasket(item, buyItemDTO.getUnits()));
         return receipt.getToPay();
     }
 }

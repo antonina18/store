@@ -19,15 +19,9 @@ public class ItemController {
     }
 
     @PostMapping
-    public ResponseEntity<Map<String,Integer>> addItems(@RequestBody Item item) {
-        SpecialPrice specialPrice = new SpecialPrice();
-        specialPrice.setPrice(4);
-        specialPrice.setUnit(4);
-        item.setSpecialPrice(specialPrice);
-        Integer unit = 4;
-        final Integer actualTotalPrice = itemService.addItems(unit, item);
-        Map<String,Integer> totalPriceResponse = Collections.singletonMap("actualTotalPrice", actualTotalPrice);
-        return new ResponseEntity<>(totalPriceResponse, HttpStatus.ACCEPTED);
+    public ResponseEntity<Map<String,Integer>> addItems(@RequestBody ItemDTO itemDTO) {
+        itemService.addItem(itemDTO);
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
     @GetMapping

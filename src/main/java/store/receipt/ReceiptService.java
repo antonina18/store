@@ -11,7 +11,4 @@ public class ReceiptService {
 
     private final Receipt receipt;
 
-    public void resetReceipt() {
-        receipt.reset();
-    }
 }

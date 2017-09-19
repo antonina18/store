@@ -10,20 +10,17 @@ import java.util.stream.Collectors;
 @Service
 public class ItemService {
 
-    private final Receipt receipt;
     private final ItemRepository itemRepository;
     private final MapperHandler mapperHandler;
 
-    public ItemService(Receipt receipt, ItemRepository itemRepository, MapperHandler mapperHandler) {
-        this.receipt = receipt;
+    public ItemService(ItemRepository itemRepository, MapperHandler mapperHandler) {
         this.itemRepository = itemRepository;
         this.mapperHandler = mapperHandler;
     }
 
-    public Integer addItems(Integer unit, Item item) {
+    public void addItem(ItemDTO itemDTO) {
+        Item item = mapperHandler.transformTo(itemDTO, Item.class);
         itemRepository.save(item);
-//        receipt.addItems(unit, item);
-        return receipt.getToPay();
     }
 
     public List<ItemDTO> getAllItems() {

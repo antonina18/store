@@ -23,9 +23,9 @@ public class ReceiptController {
         return new ResponseEntity<>(receipt, HttpStatus.OK);
     }
 
-    @DeleteMapping
-    public ResponseEntity resetReceipt() {
-        receiptService.resetReceipt();
-        return new ResponseEntity(HttpStatus.OK);
-    }
+//    @DeleteMapping
+//    public ResponseEntity resetReceipt() {
+//        receiptService.resetReceipt();
+//        return new ResponseEntity(HttpStatus.OK);
+//    }
 }

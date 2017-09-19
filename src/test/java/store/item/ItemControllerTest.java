@@ -40,17 +40,12 @@ public class ItemControllerTest {
 
     @Test
     public void shouldReturn2XXAndActualPrice() throws Exception {
-        String expected = "{\"actualTotalPrice\":15}";
-
-        given(itemService.addItems(eq(3), eq(item("A", 10)))).willReturn(15);
 
         mockMvc.perform(
                 post("/items")
-                        .param("unit", "3")
                         .content("{\"name\":\"A\",\"price\":10}")
                         .contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(status().is2xxSuccessful())
-                .andExpect(content().json(expected));
+                .andExpect(status().is2xxSuccessful());
 
     }
 

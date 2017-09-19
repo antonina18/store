@@ -16,4 +16,11 @@ public class SpecialPrice {
     private Integer unit;
     private Integer price;
 
+    public void setUnit(Integer unit) {
+        this.unit = unit;
+    }
+
+    public void setPrice(Integer price) {
+        this.price = price;
+    }
 }

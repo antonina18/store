@@ -1,9 +1,17 @@
 package store.stub;
 
 import store.item.Item;
+import store.item.ItemDTO;
 import store.item.SpecialPrice;
 
 public class ItemObjectMother {
+
+    public static ItemDTO itemDTO(String name, Integer price){
+        ItemDTO item = new ItemDTO();
+        item.setName(name);
+        item.setPrice(price);
+        return item;
+    }
 
     public static Item item(String name, Integer price){
         Item item = new Item();

@@ -9,9 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.io.Serializable;
 
-@Data
 @Entity
-@NoArgsConstructor
+@Data
 @AllArgsConstructor
 public class PromotionItems implements Serializable {
 
@@ -22,9 +21,24 @@ public class PromotionItems implements Serializable {
     private String itemY;
     private Integer discount;
 
+    public PromotionItems() {
+
+    }
+
     public PromotionItems(String itemX, String itemY) {
         this.itemX = itemX;
         this.itemY = itemY;
     }
 
+    public void setItemX(String itemX) {
+        this.itemX = itemX;
+    }
+
+    public void setItemY(String itemY) {
+        this.itemY = itemY;
+    }
+
+    public void setDiscount(Integer discount) {
+        this.discount = discount;
+    }
 }

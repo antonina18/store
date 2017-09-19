@@ -7,5 +7,12 @@ public class ItemDTO {
 
     private String name;
     private Integer price;
-    private Integer units;
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPrice(Integer price) {
+        this.price = price;
+    }
 }
