@@ -17,8 +17,9 @@ public class Basket {
         itemUnitMap = new HashMap<>();
     }
 
-    public void addToBasket(Item item, Integer units){
-        itemUnitMap.put(item, units);
+    public Basket add(Item item, Integer units){
+        itemUnitMap.merge(item, units, Integer::sum);
+        return this;
     }
 
     public Map<Item, Integer> getItemUnitMap() {

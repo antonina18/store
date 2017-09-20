@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import store.item.Item;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/receipt")
@@ -18,8 +21,8 @@ public class ReceiptController {
     }
 
     @GetMapping
-    public ResponseEntity<Receipt> getReceipt() {
-        Receipt receipt = receiptService.getReceipt();
+    public ResponseEntity<Map<Item, Integer>> getReceipt() {
+        Map<Item, Integer> receipt = receiptService.getReceipt();
         return new ResponseEntity<>(receipt, HttpStatus.OK);
     }
 

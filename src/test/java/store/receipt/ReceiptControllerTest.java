@@ -40,12 +40,13 @@ public class ReceiptControllerTest {
     }
 
     @Ignore
+    //// TODO: 19.09.17 change it
     @Test
     public void shouldReturn2XXAndActualPrice() throws Exception {
         String expected = "\"toPay\":57";
 
         mockMvc.perform(
-                post("/items")
+                post("/buy")
                         .param("unit", "3")
                         .content("{\"name\":\"butter\",\"price\":10}")
                         .contentType(MediaType.APPLICATION_JSON_UTF8))
